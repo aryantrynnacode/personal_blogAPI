@@ -19,3 +19,9 @@ def delete_article(article_id):
     with engine.begin() as conn:
         conn.execute(stmt)
 
+def update_article(article_id, new_title, article_title):
+    stmt = (
+        update(Blog)
+        .where(Blog.c.article_id == article_id)
+        .values(article_title == new_title)
+    )
