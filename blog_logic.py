@@ -23,7 +23,7 @@ def update_article(article_id, new_title, article_title):
     stmt = (
         update(Blog)
         .where(Blog.c.article_id == article_id)
-        .values(article_title == new_title)
+        .values(article_title = new_title)
     )
     with engine.begin() as conn:
         conn.execute(stmt)
