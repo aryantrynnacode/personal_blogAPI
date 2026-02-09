@@ -27,7 +27,15 @@ def del_article(article_id):
         article = delete_article(article_id)
         return jsonify(article)
 
-#update article pending
+@app.route('/articles/<int:article_id>', methods = ["PUT"])
+def upd_article(article_id):
+        data = request.json
+        title = data["new_title"]
+        content = data["new_body"]
+
+        update_article(article_id, title, content)
+        return jsonify({"message": "article updated"}),200
+
 
 
         
