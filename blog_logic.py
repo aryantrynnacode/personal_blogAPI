@@ -2,23 +2,17 @@ from sqlalchemy import insert, select, update, delete
 from models import Blog
 from database import engine
 
-def row_to_dict(row):
-    return dict(row._mapping)
-
 def get_all_articles():
     stmt = select(Blog)
     with engine.connect() as conn:
         result = conn.execute(stmt)
-        rows = result.fetchall()
-        return [row_to_dict(rows) for row in rows] 
-    
+        return result.mappings().all()
+     
 def get_article_by_id(article_id):
     stmt = select(Blog).where(Blog.c.article_id == article_id)
     with engine.begin() as conn:
         result = conn.execute(stmt)
-        row = result.fetchone()
-        return row_to_dict(row) if row else None
-
+        return result.mappings().first()
 
 def create_article(article_title, article_body):
     stmt = insert(Blog).values(
@@ -26,7 +20,8 @@ def create_article(article_title, article_body):
         article_body = article_body
     )
     with engine.begin() as conn:
-        conn.execute(stmt)
+       conn.execute(stmt)
+
 
 def delete_article(article_id):
     stmt = delete(Blog).where(Blog.c.article_id == article_id)
