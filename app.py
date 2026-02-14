@@ -25,7 +25,7 @@ def add_articles():
 @app.route('/articles/<int:article_id>', methods = ["DELETE"])
 def del_article(article_id):
         article = delete_article(article_id)
-        return jsonify(article)
+        return jsonify({"message": "article deleted"}),204 
 
 @app.route('/articles/<int:article_id>', methods = ["PUT"])
 def upd_article(article_id):
