@@ -10,7 +10,7 @@ def get_all_articles():
      
 def get_article_by_id(article_id):
     stmt = select(Blog).where(Blog.c.article_id == article_id)
-    with engine.begin() as conn:
+    with engine.connect() as conn:
         result = conn.execute(stmt)
         return result.mappings().first()
 
@@ -32,8 +32,10 @@ def update_article(article_id, new_title,  new_body):
     stmt = (
         update(Blog)
         .where(Blog.c.article_id == article_id)
-        .values(article_title = new_title)
-        .values(article_body = new_body)
+        .values(
+            article_title = new_title,
+            article_body = new_body
+        )
     )
     with engine.begin() as conn:
         conn.execute(stmt)
