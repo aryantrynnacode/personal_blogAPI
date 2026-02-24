@@ -38,4 +38,8 @@ def update_article(article_id, new_title,  new_body):
         )
     )
     with engine.begin() as conn:
-        conn.execute(stmt)
+        result = conn.execute(stmt)
+    if result.rowcount == 0:
+        return{"error": "article not found"}, 404
+    
+    return{"message": "article updated succesfully"}, 200
