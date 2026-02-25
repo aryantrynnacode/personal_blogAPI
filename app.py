@@ -12,7 +12,9 @@ def getall_articles():
 @app.route('/articles/<int:article_id>', methods = ["GET"])
 def get_articles(article_id):
         article = get_article_by_id(article_id)
-        return jsonify(article)
+        if not article:
+                return jsonify({"error": "Article not found"}), 404
+        return jsonify(article), 200
 
 @app.route('/articles', methods = ["POST"])
 def add_articles():
@@ -25,7 +27,7 @@ def add_articles():
 @app.route('/articles/<int:article_id>', methods = ["DELETE"])
 def del_article(article_id):
         article = delete_article(article_id)
-        return jsonify({"message": "article deleted"}),204 
+        return jsonify({"message": "article deleted"}),200
 
 @app.route('/articles/<int:article_id>', methods = ["PUT"])
 def upd_article(article_id):
