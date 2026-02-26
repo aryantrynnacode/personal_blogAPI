@@ -16,13 +16,22 @@ def get_articles(article_id):
                 return jsonify({"error": "Article not found"}), 404
         return jsonify(article), 200
 
-@app.route('/articles', methods = ["POST"])
+@app.route('/articles', methods=["POST"])
 def add_articles():
-        data = request.json
-        title = data["article_title"]
-        content = data["article_body"]
-        create_article(title, content)
-        return jsonify({"message": "article created"}),201
+    data = request.get_json()
+
+    if not data or "article_title" not in data or "article_body" not in data:
+        return jsonify({"error": "Invalid request body"}), 400
+
+    title = data["article_title"].strip()
+    content = data["article_body"].strip()
+
+    article_id = create_article(title, content)
+
+    return jsonify({
+        "message": "Article created",
+        "id": article_id
+    }), 201
 
 @app.route('/articles/<int:article_id>', methods = ["DELETE"])
 def del_article(article_id):
